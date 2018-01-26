@@ -65,6 +65,74 @@ to label each line with a line number.
 
 If the compiler tells you there is an error on Line $x$, you can issue `:<x>` to jump to Line $x$.  For instance, `:40` will go to Line 40.
 
+## Navigation
+
+- `w`   jump to the beginning of the next word
+- `b`   jump to the beginning of the previous word (reverse of `w`)
+- `e`   jump to the end of the word (or next word when pressed again)
+- `f` + char: search forward in the line and sit on the next matching char
+- `t` + char:  search forward in the line and sit on one space before the matching char
+- <CTRL-d> jump forward half page
+- <CTRL-u> jump backward half page
+- `$` jump to end of line
+- `0` jump to the beginning of the line
+- `%` jump between matching parentheses
+
+## Navigation + Editing
+
+`vim` is powerful because you can combine _operations_ with _navigation_.  For instance `c` to change, `d` to delete, `y` to yank (copy).  Since `w` is the navigation command to move over the current word, combining them we get:
+
+- `cw` change the current word (delete the current word and enter insert mode)
+- `dw` delete the current word
+- `yw` yank the current word (copy word into buffer)
+
+Can you guess what `df)`, `dt)`, `c$`, `y0` do?
+
+If you repeat the operation `c`, `d`, and `y`, it applies to the whole line, so:
+
+- `cc` change the whole line
+- `dd` delete the whole line
+- `yy` yank the whole line
+
+You can add a number before an operation to specify how many times you want to repeat an operation.  So `5dd` deletes 5 lines, `5dw` deletes 5 words, etc.
+
+See the article [Operator, the True Power of `Vim`](http://whileimautomaton.net/2008/11/vimm3/operator) for more details.
+
+## Other Editing Operations
+
+- `A` jump to end of line and enter insert mode
+- `o` open next line and enter insert mode
+- `O` open previous line and enter insert mode
+
+## Search and Replace in `vim`
+
+
+```
+:%s/oldWord/newWord/gc 
+```
+
+`:` enters the command mode.  `%` means apply to the whole document, `s` means substitute, `g` means global (otherwise, only the first occurance of each line is replaced). `c` is optional -- adding it cause `vim` to confirm with you before each replacement  
+
+## Commenting blocks of code
+
+Sometimes we need to comment out a whole block of code in Java for testing purposes. There are several ways to do it in `vim`:
+
+- Place the cursor on the first line of the block of code you want to comment.
+- `0` to jump to the beginning of the line
+- `V` enter visual mode
+- Use arrow key to select the block of code you want to comment. 
+- `I` to insert at the beginning of the line (here, since we already selected the block, we will insert at the beginning of every selected)
+- `//` to insert the Java comment character (you will see it inserted in the current line, but don't worry)
+- <ESC> to escape from the visual code.
+
+To uncomment, 
+
+- Place the cursor on the first line of the block of code you want to comment.
+- `0` to jump to the beginning of the line
+- `<CTRL-v>` enter block visual mode
+- Use arrow key to select the columns of text containing `//`
+- `x` to delete them
+
 ## Shell Command
 
 If you need to issue a shell command quickly, you don't have to exit `vim`, run the command, and launch `vim` again.  You can use `!`, 
@@ -134,3 +202,9 @@ let g:syntastic_java_checkstyle_conf_file = "~cs2030/bin/cs2030_checks.xml"
 ```
 
 The last two lines refer to [`checkstyle`](http://checkstyle.sourceforge.net) tool and its configuration file available from `~cs2030/bin` on the host `cs2030-i.comp.nus.edu.sg`.
+
+## Splitting `vim`'s Viewport
+
+- `:sp file.java` splits the `vim` window horizontally
+- `:vsp file.java` splits the `vim` window vertically
+- `Ctrl-w Ctrl-w` moves between the different `vim` viewports
